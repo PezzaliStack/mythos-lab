@@ -1,0 +1,14 @@
+Scenario: Webhook Exposure Awareness
+Status: SAFE REVIEW SAMPLE
+
+Risk pattern:
+- A frontend contains a webhook URL.
+- Anyone viewing source can reuse it.
+- If the webhook triggers quotes, emails, CRM writes or AI jobs, abuse is possible.
+
+Defensive design:
+- keep webhook endpoints behind a minimal backend or signed gateway
+- validate signatures
+- rate limit
+- rotate secrets
+- never expose admin automations directly in frontend code

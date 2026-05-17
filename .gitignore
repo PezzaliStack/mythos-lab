@@ -1,0 +1,9 @@
+# Dependencies
+node_modules/
+
+# Legacy build output (Vite now builds directly into /docs for GitHub Pages)
+dist/
+
+# Logs / OS
+*.log
+.DS_Store

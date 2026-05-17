@@ -1,0 +1,77 @@
+{
+  "severity": "Critico",
+  "category": "Frontend Security",
+  "observables": [
+    "local-data-access",
+    "token-handling",
+    "script-context",
+    "unexpected-output"
+  ],
+  "mitigations": [
+    "token-lifecycle",
+    "secure-storage",
+    "csp",
+    "logging"
+  ],
+  "status": "educational-defensive",
+  "narrative": "Token di sessione o di accesso conservati in localStorage sono leggibili da qualunque script eseguito nello stesso origin. In presenza di una dipendenza compromessa o di una XSS, questi segreti diventano facilmente accessibili. Lo scenario evidenzia come spostare i token verso meccanismi piu sicuri e come rendere osservabile l'abuso.",
+  "timeline": [
+    {
+      "phase": "Esposizione",
+      "description": "Token salvati in localStorage durante il login."
+    },
+    {
+      "phase": "Innesco",
+      "description": "Script non fidato (dipendenza o XSS) viene eseguito nell'origin."
+    },
+    {
+      "phase": "Lettura",
+      "description": "Lo script legge le chiavi token da localStorage."
+    },
+    {
+      "phase": "Abuso potenziale",
+      "description": "Il token viene riutilizzato per sessioni non autorizzate."
+    }
+  ],
+  "process_chain": [
+    "browser-tab applicazione web",
+    "bundle JS con dipendenze di terze parti",
+    "accesso sincrono a window.localStorage",
+    "potenziale invio del valore verso endpoint esterno"
+  ],
+  "browser_indicators": [
+    "Accesso a localStorage da script di dominio diverso o inatteso",
+    "Lettura di chiavi con pattern token/jwt/access subito dopo il caricamento",
+    "Richieste fetch verso domini non in allowlist contenenti valori simil-token",
+    "Mancanza di attributi HttpOnly perche i token sono lato JS"
+  ],
+  "endpoint_indicators": [
+    "Proxy/SWG che osservano JWT in querystring o body verso domini sconosciuti",
+    "WAF che rileva pattern di token nei parametri in uscita",
+    "Sessioni valide usate da user-agent o geo inconsueti (riuso token)"
+  ],
+  "telemetry": [
+    "CSP report-uri con violazioni di connect-src",
+    "Log di autenticazione che mostrano riuso dello stesso token da contesti diversi",
+    "Inventario SCA delle dipendenze front-end e relative modifiche"
+  ],
+  "mitre": [
+    {
+      "tactic": "Credential Access",
+      "technique": "Steal Web Session Cookie",
+      "id": "T1539"
+    },
+    {
+      "tactic": "Collection",
+      "technique": "Data from Local System",
+      "id": "T1005"
+    }
+  ],
+  "mitigation_checklist": [
+    "Preferire cookie HttpOnly+Secure+SameSite ai token in localStorage",
+    "Ridurre la durata dei token e introdurre refresh con rotazione",
+    "Applicare una CSP restrittiva con connect-src in allowlist",
+    "Adottare Subresource Integrity e SCA sulle dipendenze",
+    "Monitorare e correlare il riuso dei token lato server"
+  ]
+}

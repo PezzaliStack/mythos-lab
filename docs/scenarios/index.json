@@ -1,0 +1,7 @@
+[
+  {"id":"clipboard-qr-exfil","title":"Clipboard QR Exfil Awareness","category":"Living-off-the-land","severity":"Alto","tags":["clipboard","qr","exfiltration-awareness"],"files":{"overview":"overview.md","payload":"payload-demo.txt","detection":"detection.md","mitigation":"mitigation.md","indicators":"indicators.json"}},
+  {"id":"localstorage-token-leakage","title":"localStorage Token Leakage","category":"Frontend Security","severity":"Critico","tags":["localStorage","token","pwa"],"files":{"overview":"overview.md","payload":"payload-demo.txt","detection":"detection.md","mitigation":"mitigation.md","indicators":"indicators.json"}},
+  {"id":"prompt-injection-csv","title":"Prompt Injection via CSV/PDF","category":"AI Workflow Risk","severity":"Alto","tags":["ai","csv","prompt-injection"],"files":{"overview":"overview.md","payload":"payload-demo.txt","detection":"detection.md","mitigation":"mitigation.md","indicators":"indicators.json"}},
+  {"id":"service-worker-cache","title":"Service Worker Cache Risk","category":"PWA Security","severity":"Medio","tags":["service-worker","cache","offline"],"files":{"overview":"overview.md","payload":"payload-demo.txt","detection":"detection.md","mitigation":"mitigation.md","indicators":"indicators.json"}},
+  {"id":"webhook-exposure","title":"Webhook Exposure Awareness","category":"Automation Security","severity":"Alto","tags":["webhook","automation","frontend"],"files":{"overview":"overview.md","payload":"payload-demo.txt","detection":"detection.md","mitigation":"mitigation.md","indicators":"indicators.json"}}
+]

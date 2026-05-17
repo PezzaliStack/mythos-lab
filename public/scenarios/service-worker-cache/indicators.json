@@ -1,0 +1,77 @@
+{
+  "severity": "Medio",
+  "category": "PWA Security",
+  "observables": [
+    "service-worker",
+    "cache-poisoning",
+    "script-context",
+    "persistence-surface"
+  ],
+  "mitigations": [
+    "sw-scope-control",
+    "integrity",
+    "csp",
+    "cache-hygiene"
+  ],
+  "status": "educational-defensive",
+  "narrative": "Un service worker registrato con scope ampio puo memorizzare in cache risposte manipolate e servirle anche dopo una correzione lato server, creando una superficie di persistenza lato client. Lo scenario evidenzia come controllarne scope, integrita e ciclo di vita.",
+  "timeline": [
+    {
+      "phase": "Registrazione",
+      "description": "Service worker registrato con scope esteso."
+    },
+    {
+      "phase": "Popolamento cache",
+      "description": "Risposte (potenzialmente alterate) salvate in Cache Storage."
+    },
+    {
+      "phase": "Persistenza",
+      "description": "Contenuto servito dalla cache anche dopo fix server-side."
+    },
+    {
+      "phase": "Effetto",
+      "description": "Client continua a eseguire risorse obsolete o manipolate."
+    }
+  ],
+  "process_chain": [
+    "pagina che chiama navigator.serviceWorker.register",
+    "evento install/activate del worker",
+    "intercettazione fetch e scrittura in Cache Storage",
+    "consegna offline-first di risorse memorizzate"
+  ],
+  "browser_indicators": [
+    "Registrazione service worker con scope piu ampio del necessario",
+    "Strategie cache-first su risorse sensibili o dinamiche",
+    "Versioni di cache non invalidate tra i deploy",
+    "Discrepanza tra risorsa servita e risorsa attuale del server"
+  ],
+  "endpoint_indicators": [
+    "Client che continuano a usare asset con hash obsoleto post-deploy",
+    "Telemetria RUM con versioni applicative non allineate",
+    "Assenza di richieste di rete attese perche servite da cache"
+  ],
+  "telemetry": [
+    "Inventario dei service worker registrati per origin",
+    "Log di versione cache e strategia di invalidazione",
+    "Monitoraggio integrita asset (SRI) e mismatch di versione"
+  ],
+  "mitre": [
+    {
+      "tactic": "Persistence",
+      "technique": "Server Software Component",
+      "id": "T1505"
+    },
+    {
+      "tactic": "Defense Evasion",
+      "technique": "Modify Authentication Process",
+      "id": "T1556"
+    }
+  ],
+  "mitigation_checklist": [
+    "Limitare lo scope del service worker allo stretto necessario",
+    "Usare versioning esplicito e invalidazione deterministica della cache",
+    "Evitare cache-first su risorse di autenticazione o sensibili",
+    "Applicare SRI e CSP alle risorse memorizzabili",
+    "Prevedere un meccanismo di kill-switch/unregister controllato"
+  ]
+}

@@ -1,0 +1,20 @@
+REM Scenario: Clipboard QR Exfil Awareness
+REM Purpose: educational Red→Blue case study
+REM Status: NON-OPERATIVE / SANITIZED
+REM Target concept: clipboard abuse + browser-mediated data exposure
+REM Note: external endpoint and execution details are intentionally redacted.
+
+[SIMULATED FLOW]
+1. Trigger a visible, authorized demo action.
+2. Read a synthetic clipboard sample, not the real clipboard.
+3. Package demo metadata: user=LAB_USER, host=LAB_HOST, timestamp=LAB_TIME.
+4. Encode only the synthetic sample.
+5. Render a local QR placeholder inside the lab UI.
+
+[REDACTED ORIGINAL PATTERN]
+- Real clipboard access: REDACTED
+- External QR service: REDACTED
+- Automatic browser launch: REDACTED
+
+[WHY THIS MATTERS]
+A defender must understand that clipboard, browser and QR workflows can become silent data-loss channels even without destructive malware.

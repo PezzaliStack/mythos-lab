@@ -1,0 +1,77 @@
+{
+  "severity": "Alto",
+  "category": "AI Workflow Risk",
+  "observables": [
+    "data-driven-instruction",
+    "ai-context",
+    "unexpected-output",
+    "trust-boundary"
+  ],
+  "mitigations": [
+    "input-isolation",
+    "output-validation",
+    "least-privilege",
+    "logging"
+  ],
+  "status": "educational-defensive",
+  "narrative": "Un file CSV o PDF apparentemente innocuo contiene testo che, una volta passato a un assistente AI, viene interpretato come istruzione anziche come dato. Lo scenario serve a ragionare sul confine di fiducia tra contenuti non fidati e contesto di un modello, e su come strumentare detection e contenimento.",
+  "timeline": [
+    {
+      "phase": "Preparazione",
+      "description": "Contenuto ostile incorporato in celle/testo del documento."
+    },
+    {
+      "phase": "Ingestione",
+      "description": "Il documento viene caricato in un workflow AI senza isolamento."
+    },
+    {
+      "phase": "Confusione di contesto",
+      "description": "Il modello tratta il dato come istruzione operativa."
+    },
+    {
+      "phase": "Effetto",
+      "description": "Output deviato o azioni non previste a valle del modello."
+    }
+  ],
+  "process_chain": [
+    "ingestione documento (CSV/PDF) da fonte non fidata",
+    "parser che concatena contenuto nel prompt",
+    "modello AI senza separazione system/user/data",
+    "componente a valle che esegue l'output del modello"
+  ],
+  "browser_indicators": [
+    "Contenuto documentale con frasi imperative tipo istruzione di sistema",
+    "Marcatori sospetti (ignora istruzioni, agisci come) nei dati",
+    "Output del modello che devia dal task richiesto",
+    "Campi dati che contengono testo eccessivamente lungo o direttivo"
+  ],
+  "endpoint_indicators": [
+    "Log del gateway AI con prompt che mescolano dati e istruzioni",
+    "Azioni a valle (chiamate tool) non coerenti con la richiesta utente",
+    "Aumento di rifiuti o risposte fuori scope correlati a specifici upload"
+  ],
+  "telemetry": [
+    "Tracing del prompt con provenienza dei segmenti (system/user/data)",
+    "Validazione e logging dell'output prima di azioni automatizzate",
+    "Conteggio di pattern di injection rilevati per sorgente documento"
+  ],
+  "mitre": [
+    {
+      "tactic": "Initial Access",
+      "technique": "Phishing: Spearphishing Attachment",
+      "id": "T1566.001"
+    },
+    {
+      "tactic": "Execution",
+      "technique": "User Execution: Malicious File",
+      "id": "T1204.002"
+    }
+  ],
+  "mitigation_checklist": [
+    "Separare nettamente contesto di sistema, input utente e dati non fidati",
+    "Trattare ogni contenuto documentale come non fidato per default",
+    "Validare e vincolare l'output del modello prima di azioni a valle",
+    "Applicare least-privilege ai tool invocabili dall'AI",
+    "Loggare prompt e decisioni per audit e detection"
+  ]
+}

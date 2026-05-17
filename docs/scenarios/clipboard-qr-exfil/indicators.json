@@ -1,0 +1,77 @@
+{
+  "severity": "Alto",
+  "category": "Living-off-the-land",
+  "observables": [
+    "process-chain",
+    "browser-action",
+    "local-data-access",
+    "unexpected-output"
+  ],
+  "mitigations": [
+    "least-privilege",
+    "local-data-minimization",
+    "explicit-consent",
+    "logging"
+  ],
+  "status": "educational-defensive",
+  "narrative": "Una pagina web legittima ottiene accesso agli appunti del browser e, sfruttando un consenso implicito dell'utente, trasforma dati copiati in un artefatto visivo (QR) che potrebbe essere fotografato o esfiltrato fuori banda. Lo scenario serve a ragionare sul confine tra funzionalita legittime di clipboard e abuso, e su come renderlo osservabile.",
+  "timeline": [
+    {
+      "phase": "Accesso",
+      "description": "La pagina richiede o eredita il permesso di lettura clipboard tramite interazione utente."
+    },
+    {
+      "phase": "Raccolta",
+      "description": "Il contenuto degli appunti viene letto in memoria lato client."
+    },
+    {
+      "phase": "Trasformazione",
+      "description": "Il dato viene codificato in un artefatto visivo locale (es. QR) senza richiesta esplicita."
+    },
+    {
+      "phase": "Uscita potenziale",
+      "description": "L'artefatto puo essere acquisito fuori banda, evitando canali di rete monitorati."
+    }
+  ],
+  "process_chain": [
+    "browser-tab (pagina non privilegiata)",
+    "clipboard-read API invocata dopo gesto utente",
+    "rendering canvas/SVG dell'artefatto",
+    "nessun processo di sistema coinvolto (contesto puramente browser)"
+  ],
+  "browser_indicators": [
+    "Chiamate a navigator.clipboard.readText fuori da un flusso di incolla atteso",
+    "Accesso clipboard non correlato ad alcun campo di input",
+    "Generazione di QR/canvas subito dopo lettura clipboard",
+    "Listener su focus/visibilitychange che innescano letture clipboard"
+  ],
+  "endpoint_indicators": [
+    "Telemetria browser enterprise che registra grant del permesso clipboard-read",
+    "Estensioni di sicurezza che segnalano accesso clipboard programmatico",
+    "Assenza di traffico di rete in uscita correlato (esfiltrazione fuori banda)"
+  ],
+  "telemetry": [
+    "Eventi di Permissions Policy per clipboard-read",
+    "Audit log applicativo sugli accessi clipboard del front-end",
+    "Conteggio anomalo di rendering QR per sessione"
+  ],
+  "mitre": [
+    {
+      "tactic": "Collection",
+      "technique": "Clipboard Data",
+      "id": "T1115"
+    },
+    {
+      "tactic": "Exfiltration",
+      "technique": "Exfiltration Over Physical/Alternative Medium",
+      "id": "T1052"
+    }
+  ],
+  "mitigation_checklist": [
+    "Limitare clipboard-read tramite Permissions-Policy a origini fidate",
+    "Richiedere un gesto utente esplicito e contestuale per ogni lettura",
+    "Non persistere ne trasformare dati clipboard senza consenso visibile",
+    "Loggare gli accessi clipboard lato applicazione per audit",
+    "Educare gli utenti sui rischi del copia/incolla di segreti"
+  ]
+}

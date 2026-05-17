@@ -1,0 +1,14 @@
+Scenario: localStorage Token Leakage
+Status: NON-OPERATIVE / EDUCATIONAL
+
+Risk pattern:
+- A frontend stores API keys, GitHub PATs or session-like secrets in localStorage.
+- Any script running in the same origin can read those values.
+- Browser extensions, XSS, compromised dependencies or injected widgets can increase exposure.
+
+Sanitized pseudo-flow:
+1. App saves DEMO_TOKEN in localStorage.
+2. A simulated reader checks whether sensitive-looking keys exist.
+3. The lab reports the risk without exporting any value.
+
+Never store long-lived secrets in frontend storage.

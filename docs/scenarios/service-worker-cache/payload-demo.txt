@@ -1,0 +1,13 @@
+Scenario: Service Worker Cache Risk
+Status: SAFE REVIEW SAMPLE
+
+Risk pattern:
+- Offline-first app caches too aggressively.
+- Old JS or sensitive reports remain available after logout.
+- A stale service worker serves outdated logic.
+
+Review questions:
+- What is cached?
+- For how long?
+- Are private exports cached?
+- Is there a visible cache reset?

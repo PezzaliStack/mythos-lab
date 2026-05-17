@@ -1,0 +1,77 @@
+{
+  "severity": "Alto",
+  "category": "Automation Security",
+  "observables": [
+    "secret-exposure",
+    "automation-endpoint",
+    "trust-boundary",
+    "unexpected-output"
+  ],
+  "mitigations": [
+    "secret-management",
+    "endpoint-authn",
+    "rate-limiting",
+    "logging"
+  ],
+  "status": "educational-defensive",
+  "narrative": "Un URL di webhook o un secret di automazione incorporato nel front-end e leggibile da chiunque ispezioni il bundle. Questo permette invocazioni non autorizzate dell'automazione a valle. Lo scenario mostra come spostare i segreti lato server e rendere osservabile l'abuso.",
+  "timeline": [
+    {
+      "phase": "Esposizione",
+      "description": "Webhook/secret incluso nel codice client o nelle variabili build."
+    },
+    {
+      "phase": "Scoperta",
+      "description": "Ispezione del bundle rivela l'endpoint e il token."
+    },
+    {
+      "phase": "Invocazione",
+      "description": "Chiamate dirette all'automazione senza autenticazione robusta."
+    },
+    {
+      "phase": "Effetto",
+      "description": "Trigger non autorizzati di flussi a valle."
+    }
+  ],
+  "process_chain": [
+    "bundle front-end contenente URL/secret",
+    "client arbitrario che estrae il valore",
+    "richieste dirette all'endpoint webhook",
+    "automazione a valle che esegue azioni sui trigger"
+  ],
+  "browser_indicators": [
+    "Stringhe simil-URL webhook o token presenti nel bundle JS",
+    "Chiamate dal client direttamente verso endpoint di automazione",
+    "Assenza di autenticazione server-side sull'endpoint",
+    "Parametri di automazione controllabili dal client"
+  ],
+  "endpoint_indicators": [
+    "Picchi di invocazioni webhook da IP/user-agent eterogenei",
+    "Trigger di automazione non correlati ad azioni utente legittime",
+    "Richieste prive di firma/HMAC valida sull'endpoint"
+  ],
+  "telemetry": [
+    "Log dell'endpoint webhook con origine e validita firma",
+    "Rate limiting e conteggio invocazioni per chiave",
+    "Scanning dei segreti su artefatti di build e repository"
+  ],
+  "mitre": [
+    {
+      "tactic": "Credential Access",
+      "technique": "Unsecured Credentials",
+      "id": "T1552"
+    },
+    {
+      "tactic": "Execution",
+      "technique": "Command and Scripting Interpreter",
+      "id": "T1059"
+    }
+  ],
+  "mitigation_checklist": [
+    "Non includere mai webhook o secret nel codice front-end",
+    "Spostare le chiamate dietro un backend con autenticazione robusta",
+    "Firmare le richieste (HMAC) e validarle lato server",
+    "Applicare rate limiting e allowlist sugli endpoint di automazione",
+    "Eseguire secret scanning continuo su build e repository"
+  ]
+}
